@@ -12,6 +12,7 @@ This pipeline orchestrates the entire data workflow:
 import os
 import subprocess
 import logging
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -32,6 +33,8 @@ logger = get_dagster_logger()
 
 # Base directory for the project
 BASE_DIR = Path(__file__).parent
+PYTHON_EXECUTABLE = sys.executable
+DBT_EXECUTABLE = str(Path(PYTHON_EXECUTABLE).with_name("dbt"))
 
 
 class ScrapeConfig(Config):
@@ -56,7 +59,7 @@ def scrape_telegram_data(context, config: ScrapeConfig) -> str:
         
         # Run scraper
         result = subprocess.run(
-            ["python", str(scraper_path)],
+            [PYTHON_EXECUTABLE, str(scraper_path)],
             cwd=str(BASE_DIR),
             capture_output=True,
             text=True,
@@ -104,7 +107,7 @@ def load_raw_to_postgres(context, scrape_result: str) -> str:
         loader_path = BASE_DIR / "scripts" / "load_to_postgres.py"
         
         result = subprocess.run(
-            ["python", str(loader_path)],
+            [PYTHON_EXECUTABLE, str(loader_path)],
             cwd=str(BASE_DIR),
             capture_output=True,
             text=True,
@@ -153,7 +156,7 @@ def run_dbt_transformations(context, load_result: str) -> str:
         
         # Run dbt
         result = subprocess.run(
-            ["dbt", "run"],
+            [DBT_EXECUTABLE, "run"],
             cwd=str(dbt_project_dir),
             capture_output=True,
             text=True,
@@ -165,7 +168,7 @@ def run_dbt_transformations(context, load_result: str) -> str:
         
         # Also run tests
         test_result = subprocess.run(
-            ["dbt", "test"],
+            [DBT_EXECUTABLE, "test"],
             cwd=str(dbt_project_dir),
             capture_output=True,
             text=True
@@ -214,7 +217,7 @@ def run_yolo_enrichment(context, dbt_result: str) -> str:
         
         # Run YOLO detection
         result = subprocess.run(
-            ["python", str(yolo_path)],
+            [PYTHON_EXECUTABLE, str(yolo_path)],
             cwd=str(BASE_DIR),
             capture_output=True,
             text=True,
@@ -262,7 +265,7 @@ def load_yolo_results(context, yolo_result: str) -> str:
         loader_path = BASE_DIR / "scripts" / "load_yolo_results.py"
         
         result = subprocess.run(
-            ["python", str(loader_path)],
+            [PYTHON_EXECUTABLE, str(loader_path)],
             cwd=str(BASE_DIR),
             capture_output=True,
             text=True,
@@ -275,7 +278,7 @@ def load_yolo_results(context, yolo_result: str) -> str:
         # Rebuild dbt model that uses YOLO data
         dbt_project_dir = BASE_DIR / "medical_warehouse"
         dbt_result = subprocess.run(
-            ["dbt", "run", "--select", "fct_image_detections"],
+            [DBT_EXECUTABLE, "run", "--select", "fct_image_detections"],
             cwd=str(dbt_project_dir),
             capture_output=True,
             text=True
