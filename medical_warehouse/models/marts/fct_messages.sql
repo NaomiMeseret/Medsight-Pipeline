@@ -25,6 +25,7 @@ fct_messages as (
         -- Foreign keys
         dc.channel_key,
         dd.date_key,
+        sm.channel_name,
         
         -- Message content
         sm.message_text,
