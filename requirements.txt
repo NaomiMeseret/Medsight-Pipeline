@@ -20,13 +20,14 @@ dbt-core==1.7.13
 dbt-postgres==1.7.13
 
 # Image Processing & Object Detection
+numpy<2
 ultralytics==8.1.0
 pillow==10.2.0
 opencv-python==4.9.0.80
 
 # Orchestration
 dagster==1.5.9
-dagster-postgres==1.5.9
+dagster-postgres==0.21.9
 
 # Utilities
 requests==2.31.0

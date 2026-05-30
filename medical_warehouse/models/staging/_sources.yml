@@ -24,3 +24,22 @@ sources:
             description: "Number of views"
           - name: forwards
             description: "Number of forwards"
+      - name: yolo_detections
+        description: "Raw YOLO object detection results for scraped Telegram images"
+        columns:
+          - name: message_id
+            description: "Telegram message identifier associated with the image"
+          - name: channel_name
+            description: "Name of the Telegram channel"
+          - name: image_path
+            description: "Path to the analyzed image"
+          - name: detected_objects_count
+            description: "Number of objects detected by YOLO"
+          - name: detected_classes
+            description: "Detected YOLO class identifiers"
+          - name: top_detected_class
+            description: "Highest-confidence detected class"
+          - name: top_confidence
+            description: "Confidence score for the top detection"
+          - name: image_category
+            description: "Derived content category for the image"
