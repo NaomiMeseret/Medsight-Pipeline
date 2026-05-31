@@ -1,6 +1,7 @@
 
 
 import os
+import sys
 import json
 import logging
 import asyncio
@@ -78,7 +79,7 @@ class TelegramScraper:
         """Initialize and connect to Telegram client."""
         try:
             self.client = TelegramClient(self.session_name, self.api_id, self.api_hash)
-            await self.client.start()
+            await self.client.connect()
             
             if not await self.client.is_user_authorized():
                 await self.client.send_code_request(self.phone)
@@ -263,7 +264,7 @@ async def main():
     if not all([API_ID, API_HASH, PHONE]):
         logger.error("Missing required environment variables. Please check your .env file.")
         logger.error("Required: TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_PHONE")
-        return
+        return False
     
     # Get channels from environment or use defaults
     channels_env = os.getenv('TELEGRAM_CHANNELS', 'CheMed123,lobelia4cosmetics,tikvahpharma')
@@ -275,7 +276,7 @@ async def main():
     # Connect to Telegram
     if not await scraper.connect():
         logger.error("Failed to connect to Telegram. Exiting.")
-        return
+        return False
     
     # Scrape each channel
     total_messages = 0
@@ -313,8 +314,9 @@ async def main():
     logger.info(f"Total images downloaded: {total_images_downloaded}")
     logger.info(f"Image download channels: {', '.join(IMAGE_DOWNLOAD_CHANNELS)}")
     logger.info("Scraping completed. Client disconnected.")
+    return True
 
 
 if __name__ == '__main__':
     import asyncio
-    asyncio.run(main())
+    sys.exit(0 if asyncio.run(main()) else 1)
