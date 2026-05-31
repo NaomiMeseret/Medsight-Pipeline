@@ -27,6 +27,7 @@ opencv-python==4.9.0.80
 
 # Orchestration
 dagster==1.5.9
+dagster-webserver==1.5.9
 dagster-postgres==0.21.9
 
 # Utilities
