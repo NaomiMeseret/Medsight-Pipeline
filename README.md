@@ -225,9 +225,3 @@ The dbt project builds:
 - Updated the scraper so Telegram authentication failures return an error instead of silently passing.
 - Updated the pipeline to use the active virtual environment Python and dbt executables.
 
-## 📝 Notes
-
-- Do not commit `.env`, `.venv`, `telegram_scraper.session`, dbt `target/`, logs, or generated cache files.
-- The first Telegram scrape may require a login code.
-- YOLO can take several minutes when many images are present.
-- The API depends on PostgreSQL and dbt models being built first.
