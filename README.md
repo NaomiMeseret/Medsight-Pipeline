@@ -143,6 +143,21 @@ Open the API docs:
 http://127.0.0.1:8000/docs
 ```
 
+## 🖥️ Streamlit Demo
+
+The Streamlit demo reads the local sample JSON and YOLO CSV files, so it can be shown without starting PostgreSQL or rerunning the Telegram scraper.
+
+```zsh
+streamlit run streamlit_app.py
+```
+
+The demo includes:
+
+- Portfolio metrics for scraped messages, views, media usage, prices, and YOLO detections
+- Channel activity and visual-content charts
+- Product-style listing extraction and searchable message tables
+- Image gallery filtered by YOLO content category
+
 ## 🧭 Run with Dagster
 
 Start Dagster:
@@ -224,4 +239,3 @@ The dbt project builds:
 - Added the raw YOLO detections source definition.
 - Updated the scraper so Telegram authentication failures return an error instead of silently passing.
 - Updated the pipeline to use the active virtual environment Python and dbt executables.
-
